@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Emilie Uriarte — Operations · Design · Fashion</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F7F3EE;
+    --warm-white: #FDFAF7;
+    --ink: #1C1A17;
+    --terracotta: #C4603A;
+    --sage: #7A8C6E;
+    --gold: #C9A84C;
+    --muted: #8C8070;
+    --border: #E2D9CF;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes breathe {
+    0%, 100% { transform: scale(1); opacity: 0.6; }
+    50% { transform: scale(1.15); opacity: 1; }
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 500;
+    padding: 20px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(28, 26, 23, 0.95);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .nav-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    color: var(--warm-white);
+    text-decoration: none;
+    letter-spacing: 0.02em;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 8px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(253,250,247,0.5);
+    text-decoration: none;
+    padding: 8px 16px;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+  }
+
+  .nav-links a:hover,
+  .nav-links a.active {
+    color: var(--warm-white);
+    border-color: rgba(255,255,255,0.15);
+  }
+
+  .nav-links a.active {
+    color: var(--terracotta);
+    border-color: var(--terracotta);
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-top: 60px;
+  }
+
+  .hero-left {
+    background: var(--ink);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 60px 56px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-left::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(196,96,58,0.15) 0%, transparent 70%);
+    animation: breathe 6s ease-in-out infinite;
+  }
+
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--terracotta);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.2s;
+  }
+
+  .hero-name {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(52px, 6vw, 80px);
+    font-weight: 700;
+    color: var(--warm-white);
+    line-height: 1;
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.4s;
+  }
+
+  .hero-name span {
+    display: block;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--gold);
+  }
+
+  .hero-tagline {
+    font-size: 15px;
+    color: rgba(253,250,247,0.7);
+    line-height: 1.8;
+    max-width: 340px;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.6s;
+  }
+
+  .hero-contact {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.8s;
+  }
+
+  .hero-contact a {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: rgba(253,250,247,0.5);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    transition: color 0.3s;
+  }
+
+  .hero-contact a:hover { color: var(--terracotta); }
+
+  .hero-right {
+    background: var(--warm-white);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 56px;
+    position: relative;
+  }
+
+  .hero-right::after {
+    content: 'EU';
+    position: absolute;
+    bottom: -40px; right: -20px;
+    font-family: 'Playfair Display', serif;
+    font-size: 200px;
+    font-weight: 700;
+    color: var(--border);
+    line-height: 1;
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  .identity-list {
+    list-style: none;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.5s;
+  }
+
+  .identity-list li {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .identity-list li:first-child { border-top: 1px solid var(--border); }
+
+  .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--terracotta);
+    flex-shrink: 0;
+  }
+
+  .dot.sage { background: var(--sage); }
+  .dot.gold { background: var(--gold); }
+
+  /* PAGE SECTIONS */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* SHARED SECTION STYLES */
+  .section { padding: 100px 0; }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 56px;
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--terracotta);
+    text-transform: uppercase;
+    margin-bottom: 48px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .section-label::after {
+    content: '';
+    height: 1px;
+    flex: 1;
+    background: var(--border);
+  }
+
+  /* WHAT I DO */
+  .what-i-do { background: var(--warm-white); }
+
+  .domains-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+
+  .domain-card {
+    background: var(--cream);
+    padding: 40px 32px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+  }
+
+  .domain-card:hover { transform: translateY(-4px); }
+
+  .domain-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 0;
+    background: var(--terracotta);
+    transition: height 0.4s ease;
+  }
+
+  .domain-card:hover::before { height: 100%; }
+
+  .domain-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 56px;
+    font-weight: 700;
+    color: var(--border);
+    line-height: 1;
+    margin-bottom: 20px;
+  }
+
+  .domain-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 400;
+    margin-bottom: 12px;
+  }
+
+  .domain-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  /* PROJECTS */
+  .projects-section { background: var(--cream); }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+
+  .project-card {
+    background: var(--warm-white);
+    padding: 36px 32px;
+    text-decoration: none;
+    color: var(--ink);
+    display: block;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+  }
+
+  .project-card:hover { transform: translateY(-4px); }
+
+  .project-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 0;
+    background: var(--terracotta);
+    transition: height 0.4s ease;
+  }
+
+  .project-card:hover::before { height: 100%; }
+
+  .project-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+    margin-bottom: 12px;
+  }
+
+  .project-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 400;
+    margin-bottom: 10px;
+    line-height: 1.3;
+  }
+
+  .project-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
+
+  .project-link {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--terracotta);
+    letter-spacing: 0.08em;
+  }
+
+  /* EXPERIENCE — CV STYLE */
+  .experience-section { background: var(--warm-white); }
+
+  .cv-list { list-style: none; }
+
+  .cv-item {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 32px;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--border);
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  .cv-item.visible { opacity: 1; transform: translateY(0); }
+  .cv-item:first-child { border-top: 1px solid var(--border); }
+
+  .cv-dates {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    padding-top: 3px;
+  }
+
+  .cv-right { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+
+  .cv-info {}
+
+  .cv-company {
+    font-size: 12px;
+    color: var(--terracotta);
+    font-weight: 500;
+    margin-bottom: 4px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.05em;
+  }
+
+  .cv-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 400;
+  }
+
+  .cv-link {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--terracotta);
+    text-decoration: none;
+    white-space: nowrap;
+    padding-top: 3px;
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+  }
+
+  .cv-link:hover { opacity: 1; }
+
+  /* SKILLS */
+  .skills-section { background: var(--cream); }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px 64px;
+  }
+
+  .skill-group-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+    margin-bottom: 14px;
+  }
+
+  .skill-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+
+  .skill-tag {
+    font-size: 12px;
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    background: var(--warm-white);
+  }
+
+  /* CURRENTLY BUILDING */
+  .building-section { background: var(--ink); }
+  .building-section .section-label { color: var(--terracotta); }
+  .building-section .section-label::after { background: rgba(255,255,255,0.1); }
+
+  .building-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+    padding: 48px;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .building-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 40px;
+    font-weight: 400;
+    color: var(--warm-white);
+    margin-bottom: 16px;
+  }
+
+  .building-desc {
+    font-size: 14px;
+    color: rgba(253,250,247,0.6);
+    line-height: 1.9;
+  }
+
+  .building-stack { display: flex; flex-wrap: wrap; gap: 10px; }
+
+  .stack-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    padding: 8px 16px;
+    border: 1px solid rgba(255,255,255,0.15);
+    color: rgba(253,250,247,0.5);
+    letter-spacing: 0.05em;
+  }
+
+  /* PERSONAL PAGE */
+  .personal-intro {
+    background: var(--warm-white);
+  }
+
+  .personal-intro-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .personal-intro-text h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 400;
+    line-height: 1.3;
+    margin-bottom: 24px;
+  }
+
+  .personal-intro-text h2 em { font-style: italic; color: var(--terracotta); }
+
+  .personal-intro-text p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.9;
+    margin-bottom: 16px;
+  }
+
+  .personal-facts { display: flex; flex-direction: column; gap: 20px; }
+
+  .personal-fact {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 20px;
+    background: var(--cream);
+    border-left: 2px solid var(--border);
+    transition: border-color 0.3s;
+  }
+
+  .personal-fact:hover { border-color: var(--terracotta); }
+
+  .personal-fact-icon { font-size: 20px; flex-shrink: 0; }
+
+  .personal-fact-text {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  .personal-fact-text strong {
+    display: block;
+    color: var(--ink);
+    font-weight: 500;
+    margin-bottom: 4px;
+    font-size: 14px;
+  }
+
+  /* CREATIVE PROJECTS */
+  .creative-section { background: var(--cream); }
+
+  .creative-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2px;
+  }
+
+  .creative-card {
+    background: var(--warm-white);
+    padding: 48px 40px;
+    text-decoration: none;
+    color: var(--ink);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s;
+    display: block;
+  }
+
+  .creative-card:hover { transform: translateY(-4px); }
+
+  .creative-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 0;
+    background: var(--gold);
+    transition: height 0.4s;
+  }
+
+  .creative-card:hover::before { height: 100%; }
+
+  .creative-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+
+  .creative-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 1.2;
+    margin-bottom: 16px;
+  }
+
+  .creative-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: 24px;
+  }
+
+  .creative-link {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--gold);
+    letter-spacing: 0.08em;
+  }
+
+  /* CTA */
+  .cta-section {
+    background: var(--warm-white);
+    text-align: center;
+    padding: 100px 0;
+  }
+
+  .cta-section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 56px;
+    font-weight: 400;
+    margin-bottom: 16px;
+  }
+
+  .cta-section p {
+    font-size: 15px;
+    color: var(--muted);
+    margin-bottom: 40px;
+    line-height: 1.8;
+  }
+
+  .cta-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+  .btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    padding: 16px 32px;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+
+  .btn-primary { background: var(--terracotta); color: white; border: 1px solid var(--terracotta); }
+  .btn-primary:hover { background: #A84E2C; }
+  .btn-outline { background: transparent; color: var(--ink); border: 1px solid var(--border); }
+  .btn-outline:hover { border-color: var(--ink); }
+
+  /* CHAT */
+  .chat-trigger {
+    position: fixed;
+    bottom: 32px; right: 32px;
+    z-index: 200;
+    background: var(--terracotta);
+    color: white;
+    border: none;
+    padding: 16px 24px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 24px rgba(196,96,58,0.3);
+    transition: background 0.2s, transform 0.2s;
+  }
+
+  .chat-trigger:hover { background: #A84E2C; transform: translateY(-2px); }
+
+  .chat-dot {
+    width: 8px; height: 8px;
+    background: #7FD4A0;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .chat-window {
+    position: fixed;
+    bottom: 100px; right: 32px;
+    width: 380px;
+    max-height: 560px;
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    box-shadow: 0 8px 48px rgba(28,26,23,0.12);
+    z-index: 200;
+    display: none;
+    flex-direction: column;
+  }
+
+  .chat-window.open { display: flex; }
+
+  .chat-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--cream);
+  }
+
+  .chat-header h4 { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 400; }
+  .chat-header p { font-size: 11px; color: var(--muted); font-family: 'DM Mono', monospace; }
+  .chat-close { background: none; border: none; font-size: 20px; color: var(--muted); cursor: pointer; }
+
+  .chat-messages {
+    flex: 1; overflow-y: auto;
+    padding: 20px 24px;
+    display: flex; flex-direction: column; gap: 16px;
+  }
+
+  .message { max-width: 85%; padding: 12px 16px; font-size: 13px; line-height: 1.6; }
+  .message.emilie { background: var(--cream); color: var(--ink); align-self: flex-start; border-left: 2px solid var(--terracotta); }
+  .message.user { background: var(--terracotta); color: white; align-self: flex-end; }
+  .message.loading { background: var(--cream); align-self: flex-start; border-left: 2px solid var(--terracotta); color: var(--muted); font-style: italic; }
+
+  .chat-suggestions { padding: 0 24px 16px; display: flex; flex-wrap: wrap; gap: 8px; }
+
+  .suggestion-chip {
+    font-size: 11px; padding: 6px 12px;
+    border: 1px solid var(--border);
+    background: none; color: var(--muted);
+    cursor: pointer; font-family: 'DM Sans', sans-serif;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .suggestion-chip:hover { border-color: var(--terracotta); color: var(--terracotta); }
+
+  .chat-input-area { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; gap: 8px; }
+
+  .chat-input {
+    flex: 1; padding: 10px 14px;
+    border: 1px solid var(--border);
+    background: var(--warm-white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px; color: var(--ink);
+    outline: none; transition: border-color 0.2s;
+  }
+
+  .chat-input:focus { border-color: var(--terracotta); }
+  .chat-send { background: var(--terracotta); color: white; border: none; padding: 10px 16px; cursor: pointer; font-size: 16px; }
+  .chat-send:hover { background: #A84E2C; }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    .nav-name { display: none; }
+    .hero { grid-template-columns: 1fr; padding-top: 60px; }
+    .hero-right { display: none; }
+    .hero-left { padding: 60px 32px; min-height: calc(100vh - 60px); }
+    .container { padding: 0 24px; }
+    .section { padding: 60px 0; }
+    .domains-grid, .projects-grid, .creative-grid { grid-template-columns: 1fr; }
+    .cv-item { grid-template-columns: 1fr; gap: 4px; }
+    .cv-right { flex-direction: column; gap: 8px; }
+    .skills-grid { grid-template-columns: 1fr; }
+    .personal-intro-grid { grid-template-columns: 1fr; gap: 40px; }
+    .building-card { grid-template-columns: 1fr; padding: 32px; }
+    .chat-window { width: calc(100vw - 32px); right: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-name">Emilie Uriarte</a>
+  <ul class="nav-links">
+    <li><a href="#" class="active" onclick="showPage('ops', this)">Ops & Systems</a></li>
+    <li><a href="#" onclick="showPage('personal', this)">Personal</a></li>
+  </ul>
+</nav>
+
+<!-- HERO (always visible) -->
+<section class="hero">
+  <div class="hero-left">
+    <p class="hero-eyebrow">Operations · CRM · Payroll · Creative</p>
+    <h1 class="hero-name">
+      Emilie
+      <span>Uriarte</span>
+    </h1>
+    <p class="hero-tagline">I build and run things from scratch — operations, systems, and client experiences. A decade of making complex things work.</p>
+    <div class="hero-contact">
+      <a href="mailto:emilieuriarte@gmail.com">emilieuriarte@gmail.com</a>
+      <a href="tel:6023089098">602-308-9098</a>
+      <span style="font-family:'DM Mono',monospace;font-size:12px;color:rgba(253,250,247,0.3);">Brooklyn, NY · Bilingual EN/ES</span>
+    </div>
+  </div>
+  <div class="hero-right">
+    <ul class="identity-list">
+      <li><span class="dot"></span>Operations & Payroll Systems</li>
+      <li><span class="dot sage"></span>CRM & Client Experience</li>
+      <li><span class="dot gold"></span>ERP / SaaS Implementation</li>
+      <li><span class="dot"></span>Google Apps Script & Automation</li>
+      <li><span class="dot sage"></span>Python · Flask · SQLite</li>
+      <li><span class="dot gold"></span>Fashion Design · Adobe Illustrator</li>
+      <li><span class="dot"></span>Capoeirista · Weaver · Maker</li>
+      <li><span class="dot sage"></span>Brooklyn · Bilingual EN/ES</li>
+    </ul>
+  </div>
+</section>
+
+<!-- OPS & SYSTEMS PAGE -->
+<div id="page-ops" class="page active">
+
+  <!-- WHAT I DO -->
+  <section class="section what-i-do">
+    <div class="container">
+      <div class="section-label">What I Do</div>
+      <div class="domains-grid">
+        <div class="domain-card">
+          <div class="domain-number">01</div>
+          <div class="domain-title">Operations & Payroll</div>
+          <p class="domain-desc">The infrastructure that keeps a business alive — payroll, HR, compliance, inventory, and retail/showroom management. I've run all of it for a luxury fashion brand for a decade, and I know how to make complex operations feel effortless.</p>
+        </div>
+        <div class="domain-card">
+          <div class="domain-number">02</div>
+          <div class="domain-title">CRM & Client Experience</div>
+          <p class="domain-desc">The relationship layer — reactivation campaigns, outreach strategy, and the kind of white-glove service that turns a one-time buyer into a loyal client. I've owned the full client lifecycle for a luxury brand from the inside.</p>
+        </div>
+        <div class="domain-card">
+          <div class="domain-number">03</div>
+          <div class="domain-title">Systems & Implementation</div>
+          <p class="domain-desc">The technical layer — cloud migration testing, Google Apps Script automations, Excel dashboards, network troubleshooting, and keeping systems running across U.S. and Canadian locations. I bridge the gap between operations and technology.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section class="section projects-section">
+    <div class="container">
+      <div class="section-label">Projects</div>
+      <div class="projects-grid">
+        <a href="#" class="project-card">
+          <p class="project-tag">Operations · CX · Systems</p>
+          <h3 class="project-title">OSKA USA</h3>
+          <p class="project-desc">10 years of systems, CX, and operations.</p>
+          <span class="project-link">See the work →</span>
+        </a>
+        <a href="#" class="project-card">
+          <p class="project-tag">Templates · Tools</p>
+          <h3 class="project-title">Retail Operations Templates</h3>
+          <p class="project-desc">Operational tools for small brands who need real systems without the complexity.</p>
+          <span class="project-link">View project →</span>
+        </a>
+        <a href="#" class="project-card">
+          <p class="project-tag">App · Building</p>
+          <h3 class="project-title">ClothSet</h3>
+          <p class="project-desc">A virtual wardrobe archive and marketplace built around you, not someone else.</p>
+          <span class="project-link">View project →</span>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- RESUME -->
+  <section class="section" style="background: var(--cream); padding-top: 0;">
+    <div class="container">
+      <div class="section-label">Experience</div>
+      <p style="font-size:15px; color:var(--muted); margin-bottom:32px;">For the full picture — roles, responsibilities, and timeline.</p>
+      <a href="#" class="btn btn-outline" style="display:inline-block;">Download Resume →</a>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section class="section skills-section">
+    <div class="container">
+      <div class="section-label">Skills & Tools</div>
+      <div class="skills-grid">
+        <div>
+          <div class="skill-group-title">Payroll & HR</div>
+          <div class="skill-tags">
+            <span class="skill-tag">Paychex Flex</span>
+            <span class="skill-tag">Multi-State Payroll</span>
+            <span class="skill-tag">Benefits Admin</span>
+            <span class="skill-tag">Open Enrollment</span>
+            <span class="skill-tag">Commission Payroll</span>
+            <span class="skill-tag">Compliance</span>
+          </div>
+        </div>
+        <div>
+          <div class="skill-group-title">CRM & Client Experience</div>
+          <div class="skill-tags">
+            <span class="skill-tag">CRM Management</span>
+            <span class="skill-tag">Client Lifecycle</span>
+            <span class="skill-tag">Reactivation Campaigns</span>
+            <span class="skill-tag">Outreach Strategy</span>
+            <span class="skill-tag">Retention</span>
+          </div>
+        </div>
+        <div>
+          <div class="skill-group-title">Systems & Tech</div>
+          <div class="skill-tags">
+            <span class="skill-tag">ERP/CRM Systems</span>
+            <span class="skill-tag">Shopify</span>
+            <span class="skill-tag">Airtable</span>
+            <span class="skill-tag">Google Apps Script</span>
+            <span class="skill-tag">TaxJar</span>
+            <span class="skill-tag">Fiserv</span>
+            <span class="skill-tag">Django</span>
+            <span class="skill-tag">API Integration</span>
+          </div>
+        </div>
+        <div>
+          <div class="skill-group-title">Building & Design</div>
+          <div class="skill-tags">
+            <span class="skill-tag">Python</span>
+            <span class="skill-tag">Flask</span>
+            <span class="skill-tag">SQLite</span>
+            <span class="skill-tag">HTML/CSS</span>
+            <span class="skill-tag">Adobe Illustrator</span>
+            <span class="skill-tag">Excel Dashboards</span>
+            <span class="skill-tag">Bilingual EN/ES</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BUILDING -->
+  <section class="section building-section">
+    <div class="container">
+      <div class="section-label">Currently Building</div>
+      <div class="building-card">
+        <div>
+          <div class="building-title">ClothSet</div>
+          <p class="building-desc">A virtual wardrobe and peer-to-peer marketplace — organize what you own, try on what you want, and buy or trade with real fit confidence. Teaching myself Python and Flask by building something real. GitHub available on request.</p>
+        </div>
+        <div class="building-stack">
+          <span class="stack-tag">Python</span>
+          <span class="stack-tag">Flask</span>
+          <span class="stack-tag">SQLite</span>
+          <span class="stack-tag">HTML/CSS</span>
+          <span class="stack-tag">Adobe Illustrator</span>
+          <span class="stack-tag">In Progress</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA OPS -->
+  <section class="cta-section">
+    <div class="container">
+      <h2>Let's talk.</h2>
+      <p>Open to roles in HR tech, payroll tech, CRM, or fashion tech — remote or NYC.<br>If something here resonates, let's connect.</p>
+      <div class="cta-buttons">
+        <a href="mailto:emilieuriarte@gmail.com" class="btn btn-primary">emilieuriarte@gmail.com</a>
+        <a href="#" class="btn btn-outline">Download Resume →</a>
+        <a href="#" class="btn btn-outline">View Portfolio →</a>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- PERSONAL PAGE -->
+<div id="page-personal" class="page">
+
+  <!-- ABOUT -->
+  <section class="section personal-intro">
+    <div class="container">
+      <div class="section-label">About Me</div>
+      <div style="max-width: 680px;">
+        <h2 style="font-family:'Playfair Display',serif; font-size:36px; font-weight:400; line-height:1.3; margin-bottom:28px;">Work is more interesting when you've <em style="font-style:italic; color:var(--terracotta);">actually lived.</em></h2>
+        <p style="font-size:15px; color:var(--muted); line-height:1.9; margin-bottom:40px;">I've sought out experiences that push me — training capoeira in Bahia, wandering Oaxacan villages where artisans weave entire worlds from thread, where communities flourish through the beauty of what their hands make, co-founding a clothing line with my cousin, drawing paper dolls just because it makes me happy. That curiosity shapes everything: how I build systems, how I connect with people, how I think about craft and beauty. Operations and creativity are the same muscle. I love working where they meet.</p>
+        <div style="display:flex; flex-direction:column; gap:24px;">
+          <div>
+            <a href="#" style="font-family:'Playfair Display',serif; font-size:18px; font-weight:400; color:var(--ink); text-decoration:none; display:block; margin-bottom:6px; transition:color 0.2s;" onmouseover="this.style.color='var(--terracotta)'" onmouseout="this.style.color='var(--ink)'">Capoeira →</a>
+            <p style="font-size:13px; color:var(--muted);">Culture, community, conditioning. The practice that made me.</p>
+          </div>
+          <div>
+            <a href="#" style="font-family:'Playfair Display',serif; font-size:18px; font-weight:400; color:var(--ink); text-decoration:none; display:block; margin-bottom:6px; transition:color 0.2s;" onmouseover="this.style.color='var(--terracotta)'" onmouseout="this.style.color='var(--ink)'">Arte Puro →</a>
+            <p style="font-size:13px; color:var(--muted);">An independent fashion line. Handmade, vintage-inspired, the origin story.</p>
+          </div>
+          <div>
+            <a href="#" style="font-family:'Playfair Display',serif; font-size:18px; font-weight:400; color:var(--ink); text-decoration:none; display:block; margin-bottom:6px; transition:color 0.2s;" onmouseover="this.style.color='var(--terracotta)'" onmouseout="this.style.color='var(--ink)'">Paper Dolls →</a>
+            <p style="font-size:13px; color:var(--muted);">Hand-drawn figures with tiny wardrobes. Analog on purpose.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA PERSONAL -->
+  <section class="cta-section">
+    <div class="container">
+      <h2>Say hello.</h2>
+      <p>I'm always happy to connect — about work, craft, fashion,<br>or whatever you're building.</p>
+      <div class="cta-buttons">
+        <a href="mailto:emilieuriarte@gmail.com" class="btn btn-primary">emilieuriarte@gmail.com</a>
+        <a href="#" onclick="showPage('ops', document.querySelector('.nav-links a'))" class="btn btn-outline">See my work →</a>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- CHAT -->
+<button class="chat-trigger" onclick="toggleChat()">
+  <span class="chat-dot"></span>
+  Ask Emilie
+</button>
+
+<div class="chat-window" id="chatWindow">
+  <div class="chat-header">
+    <div>
+      <h4>Ask Emilie</h4>
+      <p>Powered by AI · Answers instantly</p>
+    </div>
+    <button class="chat-close" onclick="toggleChat()">×</button>
+  </div>
+  <div class="chat-messages" id="chatMessages">
+    <div class="message emilie">Hi! I'm Emilie's AI assistant. Ask me anything about her work, experience, or what she's building. ✨</div>
+  </div>
+  <div class="chat-suggestions" id="suggestions">
+    <button class="suggestion-chip" onclick="sendSuggestion(this)">Tell me about ClothSet</button>
+    <button class="suggestion-chip" onclick="sendSuggestion(this)">What's her ops experience?</button>
+    <button class="suggestion-chip" onclick="sendSuggestion(this)">What roles is she looking for?</button>
+    <button class="suggestion-chip" onclick="sendSuggestion(this)">What is Arte Puro?</button>
+  </div>
+  <div class="chat-input-area">
+    <input type="text" class="chat-input" id="chatInput" placeholder="Ask something..." onkeydown="if(event.key==='Enter') sendMessage()">
+    <button class="chat-send" onclick="sendMessage()">→</button>
+  </div>
+</div>
+
+<script>
+  function showPage(page, clickedLink) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + page).classList.add('active');
+    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+    if (clickedLink) clickedLink.classList.add('active');
+    window.scrollTo({ top: document.querySelector('.hero').offsetHeight + 60, behavior: 'smooth' });
+    return false;
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 100);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.cv-item').forEach(el => observer.observe(el));
+
+  function toggleChat() {
+    document.getElementById('chatWindow').classList.toggle('open');
+  }
+
+  function sendSuggestion(btn) {
+    document.getElementById('suggestions').style.display = 'none';
+    addMessage(btn.textContent, 'user');
+    callAPI(btn.textContent);
+  }
+
+  function sendMessage() {
+    const input = document.getElementById('chatInput');
+    const text = input.value.trim();
+    if (!text) return;
+    input.value = '';
+    document.getElementById('suggestions').style.display = 'none';
+    addMessage(text, 'user');
+    callAPI(text);
+  }
+
+  function addMessage(text, role) {
+    const msgs = document.getElementById('chatMessages');
+    const div = document.createElement('div');
+    div.className = `message ${role === 'user' ? 'user' : 'emilie'}`;
+    div.textContent = text;
+    msgs.appendChild(div);
+    msgs.scrollTop = msgs.scrollHeight;
+    return div;
+  }
+
+  async function callAPI(userMessage) {
+    const msgs = document.getElementById('chatMessages');
+    const loading = document.createElement('div');
+    loading.className = 'message loading';
+    loading.textContent = 'Thinking...';
+    msgs.appendChild(loading);
+    msgs.scrollTop = msgs.scrollHeight;
+
+    try {
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1000,
+          system: `You are Emilie Uriarte's portfolio assistant. Speak warmly and directly as Emilie herself. Keep answers to 2-4 sentences. Confident, not desperate.
+
+BACKGROUND:
+- 10+ years sole U.S. Operations Manager at OSKA USA (German luxury fashion brand)
+- Multi-state payroll for 150 employees via Paychex Flex, commissions, benefits, Google Apps Script automations
+- Built 2,000 sq ft e-commerce warehouse from scratch (~3,000 SKUs)
+- Post-Covid CRM reactivation: 800-1,000 lapsed customers, 30% reactivation rate
+- ERP/CRM cloud migration (U.S. representative)
+- Previous: Diego Milano (production ops), Bahr Che Wine Bar (GM), Saks Fifth Avenue (Armani Black Label)
+- Co-founded Arte Puro fashion line 2005-2013 with cousin Leonor Aispuro
+- Building ClothSet app (Python, Flask, SQLite) — virtual wardrobe + marketplace with avatar try-on
+- Built Retail Operations Templates (Google Sheets)
+- Makes paper dolls by hand, digitized in Illustrator
+- Trained capoeira in Bahia, studied weaving in Oaxaca, volunteered with Las Otras Hermanas
+- Bilingual EN/ES, based in Greenpoint Brooklyn
+- Looking for: HR tech, payroll tech, CRM, fashion tech, ops at tech companies
+- GitHub available on request
+
+If you don't know the answer or it's not covered above, respond warmly and invite them to reach out: "That's a great question — I don't have that detail here, but I'd love to talk about it directly. Shoot me an email at emilieuriarte@gmail.com and I'll get back to you!" Keep it friendly and natural.`,
+          messages: [{ role: 'user', content: userMessage }]
+        })
+      });
+      const data = await response.json();
+      loading.remove();
+      addMessage(data.content?.[0]?.text || "That's a great question — I don't have that detail here, but I'd love to chat about it directly. Shoot me an email at emilieuriarte@gmail.com and I'll get back to you!", 'emilie');
+    } catch (err) {
+      loading.remove();
+      addMessage("Something went wrong — try emailing emilieuriarte@gmail.com!", 'emilie');
+    }
+  }
+</script>
+</body>
+</html>
