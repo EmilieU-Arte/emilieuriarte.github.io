@@ -5,6 +5,7 @@ exports.handler = async (event) => {
 
   try {
     const { messages } = JSON.parse(event.body);
+    console.log("Ask Emilie question:", messages[messages.length - 1]?.content);
 
     const response = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
