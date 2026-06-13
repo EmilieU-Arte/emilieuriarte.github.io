@@ -23,6 +23,8 @@ exports.handler = async (event) => {
     });
 
     const data = await response.json();
+    const answer = data.content?.[0]?.text || "No response";
+    console.log("Ask Emilie answer:", answer);
     return {
       statusCode: 200,
       headers: { "Content-Type": "application/json" },
